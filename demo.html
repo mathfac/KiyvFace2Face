@@ -3,13 +3,11 @@
 
 <html lang="en">
 <head>
-    <title>Betaface API - Face recognition webservice</title>
+    <title>Kyivface</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link href="css/bootstrap-theme.min.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
-    <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.bootstrap.css">
   
   <link rel="stylesheet" href="css/bootstrap.css"/>
   <link rel="stylesheet" href="css/app_dashboard.css"/>
@@ -106,7 +104,11 @@
 	        </div>
 	        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 	          <h1 class="page-header">Kyiv</h1>
-
+			<div style=";">
+				<!-- 6a2a19ba-1d2d-4e44-b42b-1e05ae7bc9f5  -->
+				        <h1>Events</h1>
+				        <div id="matches" class="container" style="margin-top: 10px"></div>
+			</div>
 	        <h1>Faces</h1>
 	        <div id="faces" class="container" style="margin-top: 10px"></div>
 <div>
@@ -142,12 +144,6 @@
 	        </div>
 	      </div>
 	    </div>
-	
-		<div style=";">
-			<!-- 6a2a19ba-1d2d-4e44-b42b-1e05ae7bc9f5  -->
-			        <h1>Matches</h1>
-			        <div id="matches" class="container" style="margin-top: 10px"></div>
-		</div>
 
 	    <!-- Modal -->
 	    <div class="modal" id="myModal">
@@ -204,7 +200,9 @@
             $(window).resize(function () {
                 updateModal();
             });
-			uploadImageUrl("http://www.fotolitopys.in.ua/media/photos/Aleksandr_Popov_pozdravil_Mitropolita_Vladimira_s_Dnem_Kieva_5.JPG", 'cropface,recognition,propoints,classifiers,extended');
+			uploadImageUrl("http://en.trend.az/article_photo/2013/12/06/yanukovich_putin_061213.jpg", 'cropface,recognition,propoints,classifiers,extended');
+			NUM_THIEVES = 2;
+			frames = [];
         });
 
         function getFaceImage(face_uid) {
@@ -344,7 +342,29 @@
                     }
                     else if (int_response == 0) {
                         //image processed
-                        parseImageInfo(image_uid, xmlDoc);
+						if(typeof(b_First) === 'undefined'){
+                        	parseImageInfo(image_uid, xmlDoc);							
+							b_First =  false;
+							arr = ['http://37.media.tumblr.com/b9fe777741d5d95b29d26ff411f48154/tumblr_n5qxrvFaJc1qggwnvo1_400.jpg',
+								'http://37.media.tumblr.com/77b766b353d9dc944a13d7e4547a5be0/tumblr_n5qwvuS3uf1qggwnvo1_400.jpg',
+								'http://24.media.tumblr.com/bc520634f321348331051c0fc5d4ca1c/tumblr_n5qwerJugY1qggwnvo1_400.jpg',
+								'http://www.cubastandard.com/wp-content/uploads/2011/10/Yanukovich.jpg'];
+							for(var i = 0 ;i < arr.length; i++){
+								uploadImageUrl(arr[i], 'cropface,recognition,propoints,classifiers,extended');
+							} 					
+							var startRec = setInterval(function(){
+								
+								if(frames.length == 0)
+									return;
+								var a =  frames.shift();
+								console.log(a);
+								doRecognizeFaces(a, NUM_THIEVES);					
+							}, 5000);
+								
+						}else {		
+							parseImageInfo(image_uid, xmlDoc);							
+						}
+
                     }
                     else {
                         //error
@@ -382,6 +402,9 @@
                 var tags = $(this).children("tags").children();
                 //
                 idx += 1;
+				if(typeof(b_First) !== 'undefined'){
+					frames.push(face_uid);
+				}
                 doAddFace(face_uid, image_uid, score, x, y, width, height, angle, points, tags, idx == $(xmlDoc).children("FaceInfo").length);
                 //query face image
                 doGetFaceImage(face_uid);
@@ -751,8 +774,11 @@
                             }
                             if ($(matches).length > 0) {
                                 $(matches).each(function () {
-                                    //escape()
-                                    ret += ['<img class="thumb" style="margin: 0px 5px; vertical-align:middle" src="', $(this)[0].data, '" title="', $(this)[0].person_name + ' ' + $(this)[0].is_match + ' ' + ($(this)[0].confidence * 100).toFixed() + '%', '"/>'].join('');
+									var style_face = "border: 5px; border-style: solid; border-color:red;";
+									if($(this)[0].is_match == true || $(this)[0].is_match == 'true'){
+										style_face = "border: 5px;border-style: solid; border-color:green;";
+                                    	ret += ['<img class="thumb" style="margin: 0px 5px; vertical-align:middle;' + style_face + '" src="', $(this)[0].data, '" title="', $(this)[0].person_name + ' ' + $(this)[0].is_match + ' ' + ($(this)[0].confidence * 100).toFixed() + '%', '"/> <h1 style="color: red;">Знайдена особа з списку розшукуваних. Данні відправлені в відділення МВС.</h1>'].join('');
+									}			
                                 })
                             }
                             return ret;
