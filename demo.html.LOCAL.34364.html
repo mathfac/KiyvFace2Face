@@ -3,15 +3,13 @@
 
 <html lang="en">
 <head>
-    <title>Kyivface</title>
+    <title>Betaface API - Face recognition webservice</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link href="css/bootstrap-theme.min.css" rel="stylesheet" />
-  
-  <link rel="stylesheet" href="css/bootstrap.css"/>
-  <link rel="stylesheet" href="css/app_dashboard.css"/>
-
+    <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.bootstrap.css">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
         <script src="js/html5shiv.js"></script>
@@ -19,7 +17,19 @@
     <![endif]-->
     <!-- Contact Form CSS files -->
 </head>
+<script type="text/javascript">
 
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35035419-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 <body>
     <script src="js/jquery-1.10.2.min.js"></script>
     <script src="js/jquery.expander.min.js"></script>
@@ -27,6 +37,7 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.dataTables.bootstrap.js"></script>
     <script src="js/image-scale.js"></script>
+    <script src="jwp/jwplayer.js"></script>    
     <style>
 
         .thumb {
@@ -55,128 +66,72 @@
             text-align: center;
         }
     </style>
-	  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-	      <div class="container-fluid">
-	        <div class="navbar-header">
-	          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-	            <span class="sr-only">Toggle navigation</span>
-	            <span class="icon-bar"></span>
-	            <span class="icon-bar"></span>
-	            <span class="icon-bar"></span>
-	          </button>
-	          <a class="navbar-brand" href="#">Project name</a>
-	        </div>
-	        <div class="navbar-collapse collapse">
-	          <ul class="nav navbar-nav navbar-right">
-	            <li><a href="#">Dashboard</a></li>
-	            <li><a href="#">Settings</a></li>
-	            <li><a href="#">Profile</a></li>
-	            <li><a href="#">Help</a></li>
-	          </ul>
-	          <form class="navbar-form navbar-right">
-	            <input type="text" class="form-control" placeholder="Search...">
-	          </form>
-	        </div>
-	      </div>
-	    </div>
 
-	    <div class="container-fluid">
-	      <div class="row">
-	        <div class="col-sm-3 col-md-2 sidebar">
-	          <ul class="nav nav-sidebar">
-	            <li class="active"><a href="#/dashboard">Thiefs</a></li>
-	            <li><a href="#/sources">Cameras</a></li>
-	            <!-- <li><a href="#">Analytics</a></li> -->
-	            <!-- <li><a href="#">Export</a></li> -->
-	          </ul>
-	         <!--  <ul class="nav nav-sidebar">
-	            <li><a href="">Nav item</a></li>
-	            <li><a href="">Nav item again</a></li>
-	            <li><a href="">One more nav</a></li>
-	            <li><a href="">Another nav item</a></li>
-	            <li><a href="">More navigation</a></li>
-	          </ul>
-	          <ul class="nav nav-sidebar">
-	            <li><a href="">Nav item again</a></li>
-	            <li><a href="">One more nav</a></li>
-	            <li><a href="">Another nav item</a></li>
-	          </ul> -->
-	        </div>
-	        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-	          <h1 class="page-header">Kyiv</h1>
-			<div style=";">
-
-    <script src="jwp/jwplayer.js"></script>  
+    <div class="page-container">
+        <nav class="navbar navbar-default" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.betaface.com"><img src="images/betaface_logo.png" ></a>
+            </div>
+        </nav>
+        <div role="main" class="container">
+        <h1>Select images</h1>
     <div id="myElement">Завантажується плеєр...</div>
 
     <script type="text/javascript">
         jwplayer("myElement").setup({
-            file: 'file:///Users/MatFuck/Dropbox/Projects/KyivFace/src/video/cam1.mp4',
+            file: 'file:///Users/MatFuck/Dropbox/Projects/KyivFace/src/video/1.mov',
             autostart: true,
             width: 640,
             height: 480
 
         });
-    </script>
+</script>
 
+        <div id="input_file" class="container" style="margin-top: 10px">
+            <input type="file" id="files" name="files[]" multiple />
+        </div>
+        <div id="input_url" class="container" style="margin-top: 10px">
+            <input type="text" id="txtUrl" />
+            <input type="button" id="btnUrl" value="Send image URL" onclick="doUploadUrl();" />
+        </div>
+        <h1>Matches</h1>
+        <div id="matches" class="container" style="margin-top: 10px"></div>
+        <h1>Faces</h1>
+        <div id="faces" class="container" style="margin-top: 10px"></div>
+        <h1>Images</h1>
+        <div id="images" class="container" style="margin-top: 10px"></div>
+        </div>
+        <aside role="complementary">
+        </aside>
+        <footer class="footer" style="text-align: center; vertical-align:middle;">
+            &copy; 2013-2014 <a href="http://www.betaface.com">Betaface</a>
+        </footer>
+    </div>
 
-				<!-- 6a2a19ba-1d2d-4e44-b42b-1e05ae7bc9f5  -->
-				        <h1>Events</h1>
-				        <div id="matches" class="container" style="margin-top: 10px"></div>
-			</div>
-	        <h1>Faces</h1>
-	        <div id="faces" class="container" style="margin-top: 10px"></div>
-<div>
-	        <h1>Thiefs</h1>
-	        <div id="images" class="container" style="margin-top: 10px"></div>
-</div>	
-	        </div>
-	<!--           <div class="row placeholders">
-	            <div class="col-xs-6 col-sm-3 placeholder">
-	 --><!--               <img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="200x200" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBEOEZEQiI+PC9yZWN0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEwMCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojZmZmO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEzcHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MjAweDIwMDwvdGV4dD48L3N2Zz4=">
-	              <h4>Label</h4> --> 
-	<!--               <span class="text-muted">Something else</span>
-	            </div>
-	            <div class="col-xs-6 col-sm-3 placeholder">
-
-	              <!-- <img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="200x200" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzM5REJBQyI+PC9yZWN0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEwMCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojMUUyOTJDO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEzcHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MjAweDIwMDwvdGV4dD48L3N2Zz4=">
-	              <h4>Label</h4>
-	              <span class="text-muted">Something else</span> 
-	            </div>
-	            <div class="col-xs-6 col-sm-3 placeholder">
-	              <img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="200x200" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBEOEZEQiI+PC9yZWN0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEwMCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojZmZmO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEzcHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MjAweDIwMDwvdGV4dD48L3N2Zz4=">
-	              <h4>Label</h4>
-	              <span class="text-muted">Something else</span>
-	            </div>
-	            <div class="col-xs-6 col-sm-3 placeholder">
-	              <img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="200x200" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzM5REJBQyI+PC9yZWN0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEwMCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojMUUyOTJDO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEzcHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MjAweDIwMDwvdGV4dD48L3N2Zz4=">
-	              <h4>Label</h4>
-	              <span class="text-muted">Something else</span>
-	            </div>
-	          </div> -->
-
-	 
-	        </div>
-	      </div>
-	    </div>
-
-	    <!-- Modal -->
-	    <div class="modal" id="myModal">
-	        <div class="modal-dialog modal-wide">
-	            <div class="modal-content">
-	            <div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	                <h4 class="modal-title" id="imageHeader"></h4>
-	            </div>
-	            <div class="modal-body">
-	                <div class="image-container" id="imageContainer" >
-	                </div>
-	            </div>
-	            <div class="modal-footer">
-	            </div>
-	            </div><!-- /.modal-content >-->
-	        </div><!-- /.modal-dialog -->
-	    </div><!-- /.modal --> -->
+    <!-- Modal -->
+    <div class="modal" id="myModal">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="imageHeader"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="image-container" id="imageContainer" >
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+            </div><!-- /.modal-content >-->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
     <script>
 
@@ -215,9 +170,6 @@
             $(window).resize(function () {
                 updateModal();
             });
-			uploadImageUrl("http://en.trend.az/article_photo/2013/12/06/yanukovich_putin_061213.jpg", 'cropface,recognition,propoints,classifiers,extended');
-			NUM_THIEVES = 2;
-			frames = [];
         });
 
         function getFaceImage(face_uid) {
@@ -288,7 +240,6 @@
                     var string_response = $(xmlDoc).children("string_response").text();
                     if (int_response == 0) {
                         var image_uid = $(xmlDoc).children("img_uid").text();
-						console.log(image_uid);
                         doAddImage(image_uid, image_filename, image);
                     }
                     else {
@@ -357,29 +308,7 @@
                     }
                     else if (int_response == 0) {
                         //image processed
-						if(typeof(b_First) === 'undefined'){
-                        	parseImageInfo(image_uid, xmlDoc);							
-							b_First =  false;
-							arr = ['http://37.media.tumblr.com/b9fe777741d5d95b29d26ff411f48154/tumblr_n5qxrvFaJc1qggwnvo1_400.jpg',
-								'http://37.media.tumblr.com/77b766b353d9dc944a13d7e4547a5be0/tumblr_n5qwvuS3uf1qggwnvo1_400.jpg',
-								'http://24.media.tumblr.com/bc520634f321348331051c0fc5d4ca1c/tumblr_n5qwerJugY1qggwnvo1_400.jpg',
-								'http://www.cubastandard.com/wp-content/uploads/2011/10/Yanukovich.jpg'];
-							for(var i = 0 ;i < arr.length; i++){
-								uploadImageUrl(arr[i], 'cropface,recognition,propoints,classifiers,extended');
-							} 					
-							var startRec = setInterval(function(){
-								
-								if(frames.length == 0)
-									return;
-								var a =  frames.shift();
-								console.log(a);
-								doRecognizeFaces(a, NUM_THIEVES);					
-							}, 5000);
-								
-						}else {		
-							parseImageInfo(image_uid, xmlDoc);							
-						}
-
+                        parseImageInfo(image_uid, xmlDoc);
                     }
                     else {
                         //error
@@ -417,9 +346,6 @@
                 var tags = $(this).children("tags").children();
                 //
                 idx += 1;
-				if(typeof(b_First) !== 'undefined'){
-					frames.push(face_uid);
-				}
                 doAddFace(face_uid, image_uid, score, x, y, width, height, angle, points, tags, idx == $(xmlDoc).children("FaceInfo").length);
                 //query face image
                 doGetFaceImage(face_uid);
@@ -587,11 +513,10 @@
             });
         }
 
-        function doRecognizeFaces(face_uid, limit) {
-			var len = limit || window.Faces.length
+        function doRecognizeFaces(face_uid) {
             if (window.Faces.length > 0) {
                 var targets = [];
-                for (var i = 0; i < len; i++) {
+                for (var i = 0; i < window.Faces.length; i++) {
                     targets.push(window.Faces[i].id);
                 }
                 recognizeImpl(face_uid, targets);
@@ -661,6 +586,11 @@
             }
         }
 
+        function imageClick(image, image_uid) {
+            window.modal_is_image = true;
+            window.modal_id = image_uid;
+            $('#myModal').modal();
+        }
             
         function updateImages() {
             $('#images').html('<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="table_images"><thead><tr><th style="width:90px;text-align:center;vertical-align:middle;">Image</th><th>ID</th><th>Status</th><th>Faces</th></tr></thead></table>');
@@ -749,7 +679,8 @@
                     {
                         "mData": null, "bSortable": false, "bSearchable": false,
                         "mRender": function (data, type, row) {
-                            return '<a href="#" onclick="doRecognizeFaces(\'' + row.id + '\', 2);">Recognize faces</a>' + '</br>';
+                            return '<a href="#" onclick="doRecognizeFaces(\'' + row.id + '\');">Recognize faces</a>' + '</br>' +
+                                    '<a href="#" onclick="doRecognizeCelebrities(\'' + row.id + '\');">Recognize celebrities</a>';
                         }
                     },
                 ]
@@ -789,11 +720,8 @@
                             }
                             if ($(matches).length > 0) {
                                 $(matches).each(function () {
-									var style_face = "border: 5px; border-style: solid; border-color:red;";
-									if($(this)[0].is_match == true || $(this)[0].is_match == 'true'){
-										style_face = "border: 5px;border-style: solid; border-color:green;";
-                                    	ret += ['<img class="thumb" style="margin: 0px 5px; vertical-align:middle;' + style_face + '" src="', $(this)[0].data, '" title="', $(this)[0].person_name + ' ' + $(this)[0].is_match + ' ' + ($(this)[0].confidence * 100).toFixed() + '%', '"/> <h1 style="color: red;">Знайдена особа з списку розшукуваних. Данні відправлені в відділення МВС.</h1>'].join('');
-									}			
+                                    //escape()
+                                    ret += ['<img class="thumb" style="margin: 0px 5px; vertical-align:middle" src="', $(this)[0].data, '" title="', $(this)[0].person_name + ' ' + $(this)[0].is_match + ' ' + ($(this)[0].confidence * 100).toFixed() + '%', '"/>'].join('');
                                 })
                             }
                             return ret;
