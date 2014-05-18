@@ -37,6 +37,7 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.dataTables.bootstrap.js"></script>
     <script src="js/image-scale.js"></script>
+    <script src="jwp/jwplayer.js"></script>    
     <style>
 
         .thumb {
@@ -81,6 +82,18 @@
         </nav>
         <div role="main" class="container">
         <h1>Select images</h1>
+    <div id="myElement">Завантажується плеєр...</div>
+
+    <script type="text/javascript">
+        jwplayer("myElement").setup({
+            file: 'file:///Users/MatFuck/Dropbox/Projects/KyivFace/src/video/1.mov',
+            autostart: true,
+            width: 640,
+            height: 480
+
+        });
+</script>
+
         <div id="input_file" class="container" style="margin-top: 10px">
             <input type="file" id="files" name="files[]" multiple />
         </div>
