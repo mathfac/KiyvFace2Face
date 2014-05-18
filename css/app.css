@@ -1,0 +1,81 @@
+/*/* app css stylesheet */
+
+.menu {
+  list-style: none;
+  border-bottom: 0.1em solid black;
+  margin-bottom: 2em;
+  padding: 0 0 0.5em;
+}
+
+.menu:before {
+  content: "[";
+}
+
+.menu:after {
+  content: "]";
+}
+
+.menu > li {
+  display: inline;
+}
+
+.menu > li:before {
+  content: "|";
+  padding-right: 0.3em;
+}
+
+.menu > li:nth-child(1):before {
+  content: "";
+  padding: 0;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    margin: 50px;
+}
+
+.dateList ul {
+    overflow: auto;
+    list-style-type: none;
+}
+
+.dateList li {
+    height: 25px;
+    float: left;
+    margin-right: 0px;
+    border-right: 1px solid #aaa;
+    list-style: none;
+    padding: 0 20px;
+}
+
+.dateList li:last-child {
+    border-right: none;
+}
+
+.dateList li a {
+    text-decoration: none;
+    color: #ccc;
+    font: 25px/1 Helvetica, Verdana, sans-serif;
+    text-transform: uppercase;
+
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.dateList li a:hover {
+    color: #666;
+}
+
+.dateList li.active a {
+    font-weight: bold;
+    color: #333;
+}*/
+
