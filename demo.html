@@ -146,15 +146,15 @@
 	        </div><!-- /.modal-dialog -->
 	    </div><!-- /.modal --> -->
 	    <script src="jwp/jwplayer.js"></script>  
-	    <script type="text/javascript">
-	        jwplayer("myElement").setup({
-	            file: 'video/cam1.mp4',
-	            autostart: true,
-	            width: 640,
-	            height: 480
-
-	        });
-	    </script>
+	    <!-- // <script type="text/javascript">
+	    	    // 	        jwplayer("myElement").setup({
+	    	    // 	            file: 'video/cam1.mp4',
+	    	    // 	            autostart: true,
+	    	    // 	            width: 640,
+	    	    // 	            height: 480
+	    	    // 
+	    	    // 	        });
+	    	    // 	    </script> -->
     <script>
 
         window.onload = function () {
@@ -192,8 +192,10 @@
             $(window).resize(function () {
                 updateModal();
             });
-			uploadImageUrl("http://en.trend.az/article_photo/2013/12/06/yanukovich_putin_061213.jpg", 'cropface,recognition,propoints,classifiers,extended');
-			NUM_THIEVES = 2;
+
+			uploadImageUrl("http://i61.tinypic.com/2nbdoq8.jpg", 'cropface,recognition,propoints,classifiers,extended');
+			uploadImageUrl("http://i62.tinypic.com/xolb2o.jpg", 'cropface,recognition,propoints,classifiers,extended');
+			NUM_THIEVES = 3;
 			frames = [];
         });
 
@@ -336,22 +338,37 @@
                         //image processed
 						if(typeof(b_First) === 'undefined'){
                         	parseImageInfo(image_uid, xmlDoc);							
-							b_First =  false;
-							arr = ['http://37.media.tumblr.com/b9fe777741d5d95b29d26ff411f48154/tumblr_n5qxrvFaJc1qggwnvo1_400.jpg',
-								'http://37.media.tumblr.com/77b766b353d9dc944a13d7e4547a5be0/tumblr_n5qwvuS3uf1qggwnvo1_400.jpg',
-								'http://24.media.tumblr.com/bc520634f321348331051c0fc5d4ca1c/tumblr_n5qwerJugY1qggwnvo1_400.jpg',
-								'http://www.cubastandard.com/wp-content/uploads/2011/10/Yanukovich.jpg'];
+							if(typeof(b_First) === 'undefined' )
+								b_First =  1;
+							else
+								b_First++;
+							arr = ['http://i59.tinypic.com/oepme.png',
+								// 'http://i59.tinypic.com/2cr0eo7.png',
+								// 'http://i57.tinypic.com/20zy88x.png',
+								'http://i62.tinypic.com/29bj380.png',
+								'http://i62.tinypic.com/bfkrau.png',
+								'http://i59.tinypic.com/qpl6k6.jpg',
+								'http://i58.tinypic.com/2rm2ueb.png',
+								'http://i62.tinypic.com/vzvmtc.png',
+								'http://i58.tinypic.com/4io39g.png',
+								// 'http://i59.tinypic.com/acbtvt.png',
+
+
+								
+								];
 							for(var i = 0 ;i < arr.length; i++){
 								uploadImageUrl(arr[i], 'cropface,recognition,propoints,classifiers,extended');
 							} 					
 							var startRec = setInterval(function(){
-								
-								if(frames.length == 0)
-									return;
-								var a =  frames.shift();
-								console.log(a);
-								doRecognizeFaces(a, NUM_THIEVES);					
-							}, 5000);
+								setTimeout(function(){
+									// if(frames.length == 0)
+									// 																											return;
+										var a =  frames.shift();
+										// console.log(a);
+										// if(a != 'cc396527-de97-11e3-a3fc-80ee734cfa77')
+											doRecognizeFaces(a, NUM_THIEVES);					
+									}, 1000);
+							}, 10000);
 								
 						}else {		
 							parseImageInfo(image_uid, xmlDoc);							
@@ -432,7 +449,7 @@
 
         function parseRecognizeResponse(xmlDocRoot) {
             var recognize_uid = $(xmlDocRoot).children("recognize_uid").text();
-            var xmlDoc = $(xmlDocRoot).children("faces_matches");
+            var xmlDoc = $(xmlDocRoot).children("faces_uidses");
             $(xmlDoc).children("FaceRecognizeInfo").each(function () {
                 for (var i = window.Matches.length - 1; i > -1; i--) {
                     if (window.Matches[i].id === recognize_uid) {
@@ -454,7 +471,7 @@
                                     is_match: match_is_match,
                                     confidence: match_confidence
                                 };
-                                matches.unshift(obj);
+                                matches.push(obj);
 
                                 if (null == match_face_data) {
                                     getFaceImage(match_face_uid);
@@ -549,7 +566,7 @@
                             data: findFaceImage(face_uid),
                             matches: null
                         };
-                        window.Matches.unshift(match_obj);
+                        window.Matches.push(match_obj);
                         getRecognizeResult(recognize_uid);
                     }
                     else {
@@ -565,10 +582,10 @@
         }
 
         function doRecognizeFaces(face_uid, limit) {
-			var len = limit || window.Faces.length
+			//var len = limit || window.Faces.length
             if (window.Faces.length > 0) {
                 var targets = [];
-                for (var i = 0; i < len; i++) {
+                for (var i = 0; i < window.Faces.length; i++) {
                     targets.push(window.Faces[i].id);
                 }
                 recognizeImpl(face_uid, targets);
@@ -769,7 +786,7 @@
 									var style_face = "border: 5px; border-style: solid; border-color:red;";
 									if($(this)[0].is_match == true || $(this)[0].is_match == 'true'){
 										style_face = "border: 5px;border-style: solid; border-color:green;";
-                                    	ret = ['<img class="thumb" style="margin: 0px 5px; vertical-align:middle;' + style_face + '" src="', $(this)[0].data, '" title="', $(this)[0].person_name + ' ' + $(this)[0].is_match + ' ' + ($(this)[0].confidence * 100).toFixed() + '%', '"/> <h1 style="color: red;">Знайдена особа з списку розшукуваних. Данні відправлені в відділення МВС.</h1>'].join('') + ret;
+                                    	ret += ['<img class="thumb" style="margin: 0px 5px; vertical-align:middle;' + style_face + '" src="', $(this)[0].data, '" title="', $(this)[0].person_name + ' ' + $(this)[0].is_match + ' ' + ($(this)[0].confidence * 100).toFixed() + '%', '"/> <h1 style="color: red;">Знайдена особа з списку розшукуваних. Данні відправлені в відділення МВС.</h1>'].join('') ;
 									}			
                                 })
                             }
